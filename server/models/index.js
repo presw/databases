@@ -10,7 +10,7 @@ module.exports = {
         callback(results);
       });
     }, // a function which produces all the messages
-    post: function (body) {
+    post: function (body, callback) {
       db.query(`SELECT ID FROM MESSAGES`, (err,ids) => {
         var maxId = 0;
         if(err) { throw err; }
@@ -20,7 +20,7 @@ module.exports = {
           }
         }
         db.query(`INSERT INTO messages(ID, messageText, username, roomname) values(${maxId + 1}, "${body.message}", "${body.username}", "${body.roomname}")`, (err, messages) => {
-        // callback body
+          callback("Inserted Message");
         });
       });
     } // a function which can be used to insert a message into the database
