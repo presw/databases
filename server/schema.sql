@@ -15,13 +15,13 @@ CREATE TABLE users (
 CREATE TABLE messages (
   /* Describe your table here.*/
   ID INT,
-  message VARCHAR(255),
-  DATE_CREATED DATETIME,
+  messageText VARCHAR(255),
+  -- DATE_CREATED DATETIME,
   roomname VARCHAR(100),
-  USERNAME_ID INT,
+  -- USERNAME_ID INT,
   username VARCHAR(100),
-  PRIMARY KEY (ID),
-  FOREIGN KEY (USERNAME_ID) REFERENCES users(ID)
+  PRIMARY KEY (ID)
+  -- FOREIGN KEY (USERNAME_ID) REFERENCES users(ID)
 );
 
 /* Create other tables and define schemas for them here! */
@@ -31,7 +31,7 @@ CREATE TABLE messages (
 -- CREATE TABLE rooms (
 --   ID INT,
 --   ROOMNAME VARCHAR(100),
---   MESSAGES VARCHAR(255) 
+--   MESSAGES VARCHAR(255)
 -- );
 
 

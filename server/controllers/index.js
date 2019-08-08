@@ -3,11 +3,18 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) {
-      console.log(req.method, res.statusCode);
+      new Promise(function(resolve, reject) {
+        models.messages.get(req, function (results) {
+          resolve(results);
+        });
+      })
+        .then(function(messages) {
+          res.send(messages);
+        });
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      console.log('MESSAGE', req.method, res.statusCode);
-      res.send("OY OY OY OY"); // a function which handles posting a message to the database
+      models.messages.post(req.body);
+      res.send("message post request received"); // a function which handles posting a message to the database
     }
   },
 
@@ -19,8 +26,7 @@ module.exports = {
     post: function (req, res) {
       console.log('USER', req.body.username, res.statusCode);
       models.users.post(req.body.username);
-      res.send("received message");
+      res.send("user post request received");
     }
   }
 };
-
