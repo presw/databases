@@ -30,9 +30,14 @@ module.exports = {
       console.log(req.method, res.statusCode);
     },
     post: function (req, res) {
-      console.log('USER', req.body.username, res.statusCode);
-      models.users.post(req.body.username);
-      res.send("user post request received");
+      new Promise((resolve, reject) => {
+        models.users.post(req.body.username, (response) => {
+          resolve(response);
+        });
+      })
+        .then((response) => {
+          res.send("user post request received: " + response);
+        });
     }
   }
 };

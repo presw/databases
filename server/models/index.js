@@ -29,18 +29,32 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function () {},
-    post: function (name) {
-      db.query(`SELECT ID FROM USERS`, (err,ids) => {
-        var maxId = 0;
-        if(err) { throw err; }
-        for (var i = 0; i < ids.length; i++) {
-          if (maxId < ids[i].ID) {
-            maxId = ids[i].ID;
-          }
-        }
-        db.query(`INSERT INTO users(ID, username) values(${maxId + 1}, "${name}")`, (err, rows) => {
-          if(err) { throw err; }
+    post: function (name, callback) {
+      db.query(`SELECT USERNAME FROM USERS`, (err, names) => {
+        var nameArr = [];
+        names.forEach(function (name) {
+          nameArr.push(name.USERNAME);
         });
+        if (nameArr.includes(name)) {
+          callback('Username already exists');
+        } else {
+          db.query(`SELECT ID FROM USERS`, (err,ids) => {
+            var maxId = 0;
+            if(err) { throw err; }
+            for (var i = 0; i < ids.length; i++) {
+              if (maxId < ids[i].ID) {
+                maxId = ids[i].ID;
+              }
+            }
+            db.query(`INSERT INTO users(ID, username) values(${maxId + 1}, "${name}")`, (err, rows) => {
+              if(err) {
+                throw err;
+              } else {
+                callback("Great success yes very nice");
+              }
+            });
+          });
+        }
       });
     }
   }

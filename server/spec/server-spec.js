@@ -20,7 +20,8 @@ describe('Persistent Node Chat Server', function() {
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    dbConnection.query('truncate ' + tablename);
+    dbConnection.query('truncate users', done);
   });
 
   afterEach(function() {
@@ -82,6 +83,23 @@ describe('Persistent Node Chat Server', function() {
         var messageLog = JSON.parse(body);
         expect(messageLog[0].messageText).to.equal('Men like you can never change!');
         expect(messageLog[0].roomname).to.equal('main');
+        done();
+      });
+    });
+  });
+
+  it('Should return an error when attempting to add an existing user', (done) => {
+    request({
+      method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/users',
+      json: { username: 'Valjean' }
+    }, (error, response) => {
+      request({
+        method: 'POST',
+        uri: 'http://127.0.0.1:3000/classes/users',
+        json: { username: 'Valjean' }
+      }, (error, response) => {
+        expect(response.body === "user post request received: Username already exists");
         done();
       });
     });
