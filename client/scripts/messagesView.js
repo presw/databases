@@ -3,7 +3,7 @@ var MessagesView = {
   $chats: $('#chats'),
   $message: $('#message'),
   $submit: $('.submit'),
-  count : 0,
+  count: 0,
 
   initialize: function() {
     MessagesView.$submit.on('submit click', function() {
@@ -46,13 +46,13 @@ var MessagesView = {
   },
 
   add: function() {
-    var messages = MessagesView.$message.val()
+    var messages = MessagesView.$message.val();
     var obj = {
       username: App.username,
       text: messages,
       roomname: RoomsView.$select.val(),
       // objectId: 'local'
-    }
+    };
     obj.objectId = this.generateRandomObjectId();
     obj.createdAt = Date(Date.now()).toString();
     Parse.create(obj);

@@ -21,7 +21,7 @@ var App = {
   },
 
   fetch: function(callback = ()=>{}) {
-    console.log("updating")
+    console.log("updating");
     Parse.readAll((data) => {
       // examine the response from the server request:
       var i, html = "";
@@ -35,7 +35,7 @@ var App = {
   },
 
   update: function(callback = ()=>{}) {
-    console.log("updating")
+    console.log("updating");
     Parse.readAll((data) => {
       // examine the response from the server request:
       var i, html = "";
@@ -48,7 +48,7 @@ var App = {
           // console.log($('#chats').children().first())
           MessagesView.renderMessage(data.results[i]);
           $('#chats').children().last().remove();
-          console.log('hi')
+          console.log('hi');
         }
       }
       callback();
