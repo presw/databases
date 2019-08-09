@@ -3,6 +3,7 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) {
+      console.log(req.body);
       new Promise(function(resolve, reject) {
         models.messages.get(req, function (results) {
           resolve(results);

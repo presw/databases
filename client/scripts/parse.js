@@ -1,11 +1,11 @@
 var Parse = {
 
-  server: `http://localhost:3000/classes/messages`,
+  server: `${window.CAMPUS}`,
 
   create: function(message, successCB, errorCB = null) {
 
     $.ajax({
-      url: Parse.server,
+      url: `${Parse.server}/classes/messages`,
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -18,9 +18,9 @@ var Parse = {
 
   readAll: function(successCB, errorCB = null) {
     $.ajax({
-      url: Parse.server,
+      url: `${Parse.server}/classes/messages`,
       type: 'GET',
-      data: { order: '-createdAt' },
+      // data: { order: '-createdAt' },
       contentType: 'application/json',
       success: successCB,
       error: errorCB || function(error) {
