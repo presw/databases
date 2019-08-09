@@ -1,23 +1,24 @@
 var Friends = {
 
-  friendList: {},
 
-  toggleStatus: function(ID) {
-    if (Friends.friendList[ID]) {
-      Friends.friendList[ID] = false;
-      $("."+ID).css('color', 'black');
-      $("."+ID).removeClass('friend');
-      return false;
+  _data: new Set,
+
+  items: function() {
+    return _.chain([...Friends._data]);
+  },
+
+  isFriend: function(name) {
+    return Friends._data.has(name);
+  },
+
+  toggleStatus: function(name, callback = ()=>{}) {
+    if (Friends._data.has(name)) {
+      Friends._data.delete(name);
+      callback(false);
     } else {
-      Friends.friendList[ID] = true;
-      $("."+ID).css('color', 'red');
-      $("."+ID).addClass('friend');
-      return true;
+      Friends._data.add(name);
+      callback(true);
     }
-
-  },
-
-  initialize: function() {
-
-  },
+  }
+  
 };

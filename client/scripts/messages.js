@@ -1,31 +1,36 @@
 var Messages = {
 
-  currentMessages: [],
 
-  sanitize: function(message) {
-    // console.log(message);
-    var keys = Object.keys(message);
-    keys.forEach(function(key) {
-      console.log(key);
-      if (key !== 'createdAt') {
-        message[key] = Messages.getRidOfSpecialCharacters(message[key]);
-      }
-    });
-    return message;
+  _data: {},
+
+  items: function() {
+    return _.chain(Object.values(Messages._data)).sortBy('createdAt');
   },
-  getRidOfSpecialCharacters: function(text) {
-    var specialCharacters = `\\!"#$%&'()*+,-./:;<=>?@[]^_{|}~`;
-    var backTick = "`";
-    if(typeof text === 'string') {
-      for (var i = 0; i < text.length; i++) {
-        if (backTick.indexOf(text[i]) !== -1 || specialCharacters.indexOf(text[i]) !== -1) {
-          text = text.substr(0, i) + text.substr(i+1, text.length - 1);
-        }
-      }
+
+  add: function(message, callback = ()=>{}) {
+    Messages._data[message.objectId] = message;
+    callback(Messages.items());
+  },
+
+  update: function(messages, callback = ()=>{}) {
+    var length = Object.keys(Messages._data).length;
+
+    for (let message of messages) {
+      Messages._data[message.objectId] = Messages._conform(message);
     }
 
-    return text;
+    // only invoke the callback if something changed
+    if (Object.keys(Messages._data).length !== length) {
+      callback(Messages.items());
+    }
+  },
+
+  _conform: function(message) {
+    // ensure each message object conforms to expected shape
+    message.text = message.text || '';
+    message.username = message.username || '';
+    message.roomname = message.roomname || '';
+    return message;
   }
-
-
+  
 };

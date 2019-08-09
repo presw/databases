@@ -10,47 +10,25 @@ var App = {
     FormView.initialize();
     RoomsView.initialize();
     MessagesView.initialize();
-    Friends.initialize();
 
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(App.stopSpinner);
 
-    setInterval("App.update()",2000);
 
+    // Poll for new messages every 3 sec
+    setInterval(App.fetch, 3000);
   },
 
   fetch: function(callback = ()=>{}) {
-    console.log("updating");
     Parse.readAll((data) => {
-      // examine the response from the server request:
-      var i, html = "";
-      for (i = data.results.length - 80; i > -1; i--) {
-        // if ()
-        // console.log(data.results[i]);
-        MessagesView.renderMessage(data.results[i]);
-      }
-      callback();
-    });
-  },
 
-  update: function(callback = ()=>{}) {
-    console.log("updating");
-    Parse.readAll((data) => {
-      // examine the response from the server request:
-      var i, html = "";
-      var flag = false;
-      console.log(data);
-      for (i = data.results.length - 80; i > -1; i--) {
-        if ($('#chats').children().children()[0].id === data.results[i].objectId) {
-          flag = true;
-        } else if (flag) {
-          // console.log($('#chats').children().first())
-          MessagesView.renderMessage(data.results[i]);
-          $('#chats').children().last().remove();
-          console.log('hi');
-        }
-      }
+      // Don't bother to update if we have no messages
+      if (!data.results || !data.results.length) { return; }
+
+      Rooms.update(data.results, RoomsView.render);
+      Messages.update(data.results, MessagesView.render);
+
       callback();
     });
   },
